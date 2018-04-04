@@ -2,7 +2,7 @@ import * as React from 'react'
 
 class About extends React.Component<{}, {}> {
   public render() {
-    return <div className="About">about me!</div>
+    return <div className="About">about me!!!!!!</div>
   }
 }
 

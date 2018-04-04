@@ -7,8 +7,11 @@ import { StaticRouter } from 'react-router-dom'
 
 import App from './App'
 
-let assets: any
-let stats: any
+let assets: any = {}
+let stats: any = {}
+
+const host: any = process.env.HOST
+const port: any = process.env.PORT || 3001
 
 const syncLoadAssets = () => {
   assets = require(process.env.RAZZLE_ASSETS_MANIFEST!)
@@ -22,9 +25,6 @@ server
   .disable('x-powered-by')
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
   .get('/*', (req: express.Request, res: express.Response) => {
-    const environment: any = process.env.NODE_ENV || 'development'
-    const host: any = process.env.HOST
-    const port: any = process.env.PORT || 3001
 
     const context: any = {}
     const modules: any = []
@@ -54,7 +54,7 @@ server
               : ''
           }
           ${
-            environment === 'production'
+            process.env.NODE_ENV === 'production'
               ? `<script src="${assets.client.js}" defer></script>`
               : `<script src="${
                   assets.client.js
@@ -63,18 +63,16 @@ server
       </head>
       <body>
           <div id="root">${markup}</div>
-          ${() => {
-            if (environment === 'production') {
-              return `<script src="${assets.client.js || ''}"></script>`
-            } else {
-              return `<script src="${assets.client.js || ''}" crossorigin></script>`
-            }
+          ${
+            process.env.NODE_ENV === 'production'
+              ? `<script src="${assets.client.js || ''}"></script>`
+              : `<script src="${assets.client.js || ''}" crossorigin></script>`
           }
           }
           ${chunks
             .map(
               chunk =>
-                environment === 'production'
+                process.env.NODE_ENV === 'production'
                   ? `<script src="/${chunk.file}"></script>`
                   : `<script src="http://${host}:${port}/${chunk.file}"></script>`,
             )

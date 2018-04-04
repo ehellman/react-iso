@@ -63,7 +63,7 @@ module.exports = {
     // - UNCOMMENT line 68
     //
     // config.module.rules.push(tsLoader)
-    if (target === 'web') {
+    if (config.target === 'web') {
       config.plugins.push(
         new ReactLoadablePlugin({
           filename: './build/react-loadable.json',
